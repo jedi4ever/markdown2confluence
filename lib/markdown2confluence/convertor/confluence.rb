@@ -99,14 +99,16 @@ module Kramdown
       end
 
       def convert_ul(el, indent)
-        ""
+        inner(el,indent)
       end
+
       alias :convert_ol :convert_ul
       alias :convert_dl :convert_ul
 
       def convert_li(el, indent)
-        "#{'-'*el.options[:level]} #{inner(el, indent)}\n"
+        "#{'-'}#{inner(el, indent)}"
       end
+
       alias :convert_dd :convert_li
 
       def convert_dt(el, indent)
@@ -116,7 +118,12 @@ module Kramdown
       def convert_html_element(el, indent)
         markup=case el.value
                when "iframe" then "{iframe:src=#{el.attr["src"]}}"
-               when "pre" then "{code}#{inner(el,indent)}{code}"
+               when "pre" then
+                 if  inner(el,indent).strip.match(/\n/)
+                   "{code}#{inner(el,indent)}{code}"
+                 else
+                   "{{#{inner(el,indent).strip}}}"
+                 end
                else inner(el, indent)
                end
       end
@@ -172,7 +179,11 @@ module Kramdown
       end
 
       def convert_codespan(el, indent)
-        "{code}#{el.value}{code}\n"
+        if  el.value.strip.match(/\n/)
+          "{code}#{el.value}{code}\n"
+        else
+          "{{#{el.value.strip}}}"
+        end
       end
 
       def convert_footnote(el, indent)
