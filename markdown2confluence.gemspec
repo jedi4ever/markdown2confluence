@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = "markdown2confluence"
 
   s.add_dependency "kramdown"
+  s.add_dependency "nokogiri"
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact

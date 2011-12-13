@@ -82,7 +82,7 @@ module Kramdown
       end
 
       def convert_p(el, indent)
-          "#{' '*indent}#{inner(el, indent)}\n\n"
+        "#{' '*indent}#{inner(el, indent)}\n\n"
       end
 
 
@@ -115,10 +115,10 @@ module Kramdown
 
       def convert_html_element(el, indent)
         markup=case el.value
-          when "iframe" then "{iframe:src=#{el.attr["src"]}}"
-          when "pre" then "{code}#{inner(el,indent)}{code}"
-          else inner(el, indent)
-        end
+               when "iframe" then "{iframe:src=#{el.attr["src"]}}"
+               when "pre" then "{code}#{inner(el,indent)}{code}"
+               else inner(el, indent)
+               end
       end
 
       def convert_xml_comment(el, indent)
@@ -168,11 +168,11 @@ module Kramdown
       end
 
       def convert_codeblock(el, indent)
-          "{code}#{el.value}{code}\n"
+        "{code}#{el.value}{code}\n"
       end
 
       def convert_codespan(el, indent)
-          "{code}#{el.value}{code}\n"
+        "{code}#{el.value}{code}\n"
       end
 
       def convert_footnote(el, indent)
@@ -192,27 +192,37 @@ module Kramdown
       end
 
       def convert_entity(el, indent)
-         inner(el,indent)
+        inner(el,indent)
       end
 
       def convert_typographic_sym(el, indent)
-         inner(el,indent)
+        inner(el,indent)
       end
 
       def convert_smart_quote(el, indent)
-         "'"
+        "'"
       end
 
       def convert_math(el, indent)
-         inner(el,indent)
+        inner(el,indent)
       end
 
       def convert_abbreviation(el, indent)
-         inner(el,indent)
+        inner(el,indent)
       end
 
       def convert_root(el, indent)
-        inner(el, indent)
+        handle_iframes(inner(el, indent))
+      end
+
+      def handle_iframes(text)
+        markup=text.gsub(/<iframe.*iframe>/) { |match| 
+          doc =Nokogiri::HTML::DocumentFragment.parse(match)
+          element=doc.search('iframe').first
+          attributes=element.attributes.map{ |at| "#{at[1].name}=#{at[1].value}"}
+          "{iframe:#{attributes.join('|')}}#{element.text}{iframe}"
+        }
+        return markup
       end
 
     end
