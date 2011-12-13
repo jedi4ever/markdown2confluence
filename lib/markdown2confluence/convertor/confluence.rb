@@ -85,9 +85,6 @@ module Kramdown
           "#{' '*indent}#{inner(el, indent)}\n\n"
       end
 
-      def convert_codeblock(el, indent)
-          "#{' '*indent}{code}#{inner(el, ident)}{code}\n"
-      end
 
       def convert_blockquote(el, indent)
         "#{' '*indent}bq. #{inner(el, indent)}\n"
@@ -113,12 +110,10 @@ module Kramdown
       alias :convert_dd :convert_li
 
       def convert_dt(el, indent)
-        "#{' '*indent}<dt#{Confluence_attributes(el.attr)}>#{inner(el, indent)}</dt>\n"
+        inner(el, indent)
       end
 
       def convert_html_element(el, indent)
-        require 'pp'
-        pp el
         inner(el, indent)
       end
 
@@ -128,29 +123,26 @@ module Kramdown
       alias :convert_xml_pi :convert_xml_comment
 
       def convert_table(el, indent)
-        "#{' '*indent}<table#{Confluence_attributes(el.attr)}>\n#{inner(el, indent)}#{' '*indent}</table>\n"
+        ""
       end
 
       def convert_thead(el, indent)
-        "#{' '*indent}<#{el.type}#{Confluence_attributes(el.attr)}>\n#{inner(el, indent)}#{' '*indent}</#{el.type}>\n"
+        inner(el, indent)
       end
-      alias :convert_tbody :convert_thead
-      alias :convert_tfoot :convert_thead
-      alias :convert_tr  :convert_thead
+
+      def convert_empty(el, indent)
+        ""
+      end
+      alias :convert_tbody :convert_empty
+      alias :convert_tfoot :convert_empty
+      alias :convert_tr  :convert_empty
 
       def convert_td(el, indent)
-        res = inner(el, indent)
-        type = (@stack[-2].type == :thead ? :th : :td)
-        attr = el.attr
-        alignment = @stack[-3].options[:alignment][@stack.last.children.index(el)]
-        if alignment != :default
-          attr = el.attr.dup
-          attr['style'] = (attr.has_key?('style') ? "#{attr['style']}; ": '') << "text-align: #{alignment}"
-        end
-        "#{' '*indent}<#{type}#{Confluence_attributes(attr)}>#{res.empty? ? entity_to_str(ENTITY_NBSP) : res}</#{type}>\n"
+        inner(el, indent)
       end
 
       def convert_comment(el, indent)
+        inner(el, indent)
       end
 
       def convert_br(el, indent)
@@ -160,29 +152,31 @@ module Kramdown
       def convert_a(el, indent)
         text=inner(el,indent)
         link=el.attr['href']
-        text="[#{text+'|' unless text.nil?}#{link}]"
-        return text
+        markup="[#{text+'|' unless text.nil?}#{link}]"
+        return markup
       end
 
       def convert_img(el, indent)
-        "<img#{Html_attributes(el.attr)} />"
+        src=el.attr['src']
+        alt=el.attr['alt']
+        markup="!#{src}#{"|alt=" unless alt.nil?}!"
+        return markup
+      end
+
+      def convert_codeblock(el, indent)
+          "#{' '*indent}{code}#{inner(el, ident)}{code}\n"
       end
 
       def convert_codespan(el, indent)
-        if el.attr['lang'] && HIGHLIGHTING_AVAILABLE
-          attr = el.attr.dup
-          result = CodeRay.scan(el.value, attr.delete('lang').to_sym).Confluence(:wrap => :span, :css => @options[:coderay_css]).chomp
-          "<code#{Confluence_attributes(attr)}>#{result}</code>"
-        else
-          "<code#{Confluence_attributes(el.attr)}>#{escape_Confluence(el.value)}</code>"
-        end
+          "#{' '*indent}{code}#{inner(el, ident)}{code}\n"
       end
 
       def convert_footnote(el, indent)
+        inner(el, indent)
       end
 
       def convert_raw(el, indent)
-          el.value
+        inner(el, indent)
       end
 
       def convert_em(el, indent)
@@ -206,18 +200,15 @@ module Kramdown
       end
 
       def convert_math(el, indent)
-        block = (el.options[:category] == :block)
-        "<script type=\"math/tex#{block ? '; mode=display' : ''}\">#{el.value}</script>#{block ? "\n" : ''}"
+         inner(el,indent)
       end
 
       def convert_abbreviation(el, indent)
-        title = @root.options[:abbrev_defs][el.value]
-        "<abbr#{!title.empty? ? " title=\"#{title}\"" : ''}>#{el.value}</abbr>"
+         inner(el,indent)
       end
 
       def convert_root(el, indent)
-        result = inner(el, indent)
-        result
+        inner(el, indent)
       end
 
     end

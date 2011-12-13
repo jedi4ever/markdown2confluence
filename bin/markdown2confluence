@@ -4,9 +4,14 @@ require 'markdown2confluence'
 
 filename=ARGV[0]
 if ARGV.size < 1
-  puts "We need at least on file argument"
-  exit -1
+puts "We need at least on file argument"
+exit -1
+  end
+
+begin
+  text=File.read(filename)
+  s=Kramdown::Document.new(text).to_confluence
+  puts s
+rescue Exception => ex
+  warn "There was an error running the convertor: \n#{ex}"
 end
-text=File.read(filename)
-s=Kramdown::Document.new(text).to_confluence
-puts s
