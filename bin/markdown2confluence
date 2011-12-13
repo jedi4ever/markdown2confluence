@@ -10,7 +10,6 @@ exit -1
 
 begin
   text=File.read(filename)
-
   s=Kramdown::Document.new(text).to_confluence
   puts s
 rescue Exception => ex

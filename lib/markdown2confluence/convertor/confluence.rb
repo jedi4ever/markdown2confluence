@@ -116,7 +116,7 @@ module Kramdown
       def convert_html_element(el, indent)
         markup=case el.value
           when "iframe" then "{iframe:src=#{el.attr["src"]}}"
-          when "pre" then "{{#{inner(el,indent)}}}"
+          when "pre" then "{code}#{inner(el,indent)}{code}"
           else inner(el, indent)
         end
       end
