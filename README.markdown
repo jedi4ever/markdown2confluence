@@ -14,4 +14,4 @@ __Note:__ This is not yet released as a gem
 
 Usage:
 
-`bundle exec bin/markdown2confluence <inputfile>`
+    $ bundle exec bin/markdown2confluence <inputfile>
