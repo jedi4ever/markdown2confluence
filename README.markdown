@@ -19,6 +19,12 @@ NOTE: *only a prelease version has been released*
 
 ### Usage:
 
+If using Gem:
+
+    $ markdown2confluence <inputfile>
+
+If using bundler:
+
     $ bundle exec bin/markdown2confluence <inputfile>
 
 ### Extending/Improving it:
