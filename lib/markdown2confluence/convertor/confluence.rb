@@ -164,11 +164,11 @@ module Kramdown
       end
 
       def convert_codeblock(el, indent)
-          "#{' '*indent}{code}#{inner(el, ident)}{code}\n"
+          "#{' '*indent}{code}#{inner(el, indent)}{code}\n"
       end
 
       def convert_codespan(el, indent)
-          "#{' '*indent}{code}#{inner(el, ident)}{code}\n"
+          "#{' '*indent}{code}#{inner(el, indent)}{code}\n"
       end
 
       def convert_footnote(el, indent)
