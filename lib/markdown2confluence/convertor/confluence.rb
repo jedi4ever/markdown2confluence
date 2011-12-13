@@ -114,7 +114,11 @@ module Kramdown
       end
 
       def convert_html_element(el, indent)
-        inner(el, indent)
+        markup=case el.value
+          when "iframe" then "{iframe:src=#{el.attr["src"]}}"
+          when "pre" then "{{#{inner(el,indent)}}}"
+          else inner(el, indent)
+        end
       end
 
       def convert_xml_comment(el, indent)
@@ -196,7 +200,7 @@ module Kramdown
       end
 
       def convert_smart_quote(el, indent)
-         inner(el,indent)
+         "'"
       end
 
       def convert_math(el, indent)
