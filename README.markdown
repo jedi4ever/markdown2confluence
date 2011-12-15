@@ -7,9 +7,7 @@ The gem is based on [Kramdown](https://github.com/gettalong/kramdown)
 
 #### Via gem
 
-NOTE: *only a prelease version has been released*
-
-    $ gem install markdown2confluence --pre
+    $ gem install markdown2confluence
 
 #### From github:
 
