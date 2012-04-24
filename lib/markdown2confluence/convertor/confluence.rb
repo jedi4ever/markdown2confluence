@@ -85,7 +85,6 @@ module Kramdown
         "#{' '*indent}#{inner(el, indent)}\n\n"
       end
 
-
       def convert_blockquote(el, indent)
         "#{' '*indent}bq. #{inner(el, indent)}\n"
       end

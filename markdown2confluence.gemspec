@@ -16,9 +16,14 @@ Gem::Specification.new do |s|
 
   s.add_dependency "kramdown"
   s.add_dependency "nokogiri"
+  
+  s.add_development_dependency('rake', "~> 0.9.2")
+  s.add_development_dependency('activesupport', '>= 3.0.0')
+  s.add_development_dependency('turn')
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact
   s.require_path = 'lib'
+  s.test_files = s.files.select { |path| path =~ /^test\/test_.*\.rb/ }
 end
 
