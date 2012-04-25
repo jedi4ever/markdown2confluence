@@ -17,13 +17,18 @@ class Markdown2ConfluenceTest < ActiveSupport::TestCase
     assert_equal "h4. Hello\n", confluence("#### Hello")
   end
 
-  test "lists" do
+  test "unordered list" do
     list =  "* this\n"
     list << "* is\n"
     list << "* a\n"
     list << "* list\n"
-    confluence_list = list.gsub("*", "-   ").gsub("\n", "\n")
+    confluence_list = list.gsub("*", "-   ")
     assert_equal confluence_list, confluence(list)
+  end
+
+  # FIX - failing test
+  test "ordered list" do
+    assert_equal "1. this\n2. is\n3. a\n4. list\n", confluence("1. this\n2. is\n3. a\n4. list\n" )
   end
 
   test "strong text" do
