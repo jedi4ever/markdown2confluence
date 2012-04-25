@@ -45,12 +45,12 @@ class Markdown2ConfluenceTest < ActiveSupport::TestCase
 
   # FIX - failing test
   test "strikethrough" do
-    # assert_equal "-strikethrough text-\n", confluence("~~strikethrough text~~")
+    assert_equal "-strikethrough text-\n", confluence("~~strikethrough text~~")
   end
 
   # FIX - failing test
   test "quote" do
-    # assert_equal "bq. this is a quote", confluence("> this is a quote")
+    assert_equal "bq. this is a quote", confluence("> this is a quote")
   end
 
   test "hyperlink" do
