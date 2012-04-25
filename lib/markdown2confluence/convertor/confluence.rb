@@ -82,9 +82,8 @@ module Kramdown
       end
 
       def convert_p(el, indent)
-        "#{' '*indent}#{inner(el, indent)}\n\n"
+        "#{' '*indent}#{inner(el, indent)}\n"
       end
-
 
       def convert_blockquote(el, indent)
         "#{' '*indent}bq. #{inner(el, indent)}\n"
@@ -119,7 +118,7 @@ module Kramdown
         markup=case el.value
                when "iframe" then "{iframe:src=#{el.attr["src"]}}"
                when "pre" then
-                 if  inner(el,indent).strip.match(/\n/)
+                 if inner(el,indent).strip.match(/\n/)
                    "{code}#{inner(el,indent)}{code}"
                  else
                    "{{#{inner(el,indent).strip}}}"
@@ -161,17 +160,15 @@ module Kramdown
       end
 
       def convert_a(el, indent)
-        text=inner(el,indent)
-        link=el.attr['href']
-        markup="[#{text+'|' unless text.nil?}#{link}]"
-        return markup
+        text   = inner(el,indent)
+        link   = el.attr['href']
+        "[#{text+'|' unless text.nil?}#{link}]"
       end
 
       def convert_img(el, indent)
-        src=el.attr['src']
-        alt=el.attr['alt']
-        markup="!#{src}#{"|alt=" unless alt.nil?}!"
-        return markup
+        src = el.attr['src']
+        alt = el.attr['alt']
+        alt.to_s.empty? ? "!#{src}!" : "!#{src}|alt=#{alt}!"
       end
 
       def convert_codeblock(el, indent)
