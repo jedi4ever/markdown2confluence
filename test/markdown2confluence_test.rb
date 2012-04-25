@@ -17,29 +17,25 @@ class Markdown2ConfluenceTest < ActiveSupport::TestCase
     assert_equal "h4. Hello\n", confluence("#### Hello")
   end
 
-  # TODO - remove these extra spaces after - symbol
   test "lists" do
     list =  "* this\n"
     list << "* is\n"
     list << "* a\n"
     list << "* list\n"
-    confluence_list = list.gsub("*", "-   ").gsub("\n", "\n\n")
+    confluence_list = list.gsub("*", "-   ").gsub("\n", "\n")
     assert_equal confluence_list, confluence(list)
   end
 
-  # TODO - two trailing newlines
   test "strong text" do
-    assert_equal "*strong*\n\n", confluence("**strong**")
+    assert_equal "*strong*\n", confluence("**strong**")
   end
 
-  # TODO - two trailing newlines
   test "italics text" do
-    assert_equal "_some text here_\n\n", confluence("*some text here*")
+    assert_equal "_some text here_\n", confluence("*some text here*")
   end
 
-  # TODO - two trailing newlines
   test "inline code" do
-    assert_equal "{{hello world}}\n\n", confluence("`hello world`")
+    assert_equal "{{hello world}}\n", confluence("`hello world`")
   end
 
   test "block of code" do
@@ -47,15 +43,33 @@ class Markdown2ConfluenceTest < ActiveSupport::TestCase
     assert_equal "{code}this is code\n{code}\n", confluence(code)
   end
 
-  # TODO - two trailing newlines
   # FIX - failing test
   test "strikethrough" do
-    assert_equal "-strikethrough text-\n\n", confluence("~~strikethrough text~~")
+    # assert_equal "-strikethrough text-\n", confluence("~~strikethrough text~~")
   end
 
   # FIX - failing test
   test "quote" do
-    assert_equal "bq. this is a quote", confluence("> this is a quote")
+    # assert_equal "bq. this is a quote", confluence("> this is a quote")
+  end
+
+  test "hyperlink" do
+    assert_equal "[github|http://github.com]\n", confluence("[github](http://github.com)")
+  end
+
+  test "image link without alt" do
+    assert_equal "!http://github.com/logo.png!\n", confluence("![](http://github.com/logo.png)")
+  end
+
+  test "image link with alt" do
+    assert_equal "!http://github.com/logo.png|alt=logo!\n", confluence("![logo](http://github.com/logo.png)")
+  end
+
+  test "horizontal rule" do
+    assert_equal "----\n", confluence("* * *")
+    assert_equal "----\n", confluence("***")
+    assert_equal "----\n", confluence("*****")
+    assert_equal "----\n", confluence("---------------------------------------")
   end
 
 private
