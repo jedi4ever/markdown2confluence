@@ -46,6 +46,7 @@ module Kramdown
         super
         @indent = 2
         @stack = []
+        @table_header = false
       end
 
       # The mapping of element type to conversion method.
@@ -133,22 +134,38 @@ module Kramdown
       alias :convert_xml_pi :convert_xml_comment
 
       def convert_table(el, indent)
-        ""
+        "#{inner(el, indent)}"
       end
 
       def convert_thead(el, indent)
-        inner(el, indent)
+        @table_header = true
+        "#{inner(el, indent)}"
+      end
+      
+      def convert_tbody(el, indent)
+        @table_header = false
+        "#{inner(el, indent)}"
+      end
+      alias :convert_tfoot :convert_tbody
+
+      def convert_tr(el, indent)
+        if @table_header
+          "||#{inner(el, indent)}\n"
+        else 
+          "|#{inner(el, indent)}\n"
+        end
+      end
+      
+      def convert_td(el, indent)
+        if @table_header
+          " #{inner(el, indent)} ||"
+        else 
+          " #{inner(el, indent)} |"
+        end
       end
 
       def convert_empty(el, indent)
         ""
-      end
-      alias :convert_tbody :convert_empty
-      alias :convert_tfoot :convert_empty
-      alias :convert_tr  :convert_empty
-
-      def convert_td(el, indent)
-        inner(el, indent)
       end
 
       def convert_comment(el, indent)
