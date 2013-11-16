@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{Based on Kramdown, a convert object .to_confluence}
 
   s.required_rubygems_version = ">= 1.3.6"
+  s.required_ruby_version = '>= 1.9.3'
   s.rubyforge_project         = "markdown2confluence"
 
   s.add_dependency "kramdown"
