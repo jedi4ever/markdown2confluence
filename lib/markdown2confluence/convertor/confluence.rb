@@ -106,7 +106,7 @@ module Kramdown
       alias :convert_dl :convert_ul
 
       def convert_li(el, indent)
-        "#{'-'*(indent/2)}#{inner(el, 0)}"
+        "#{'*'*(indent/2)}#{inner(el, 0)}"
       end
 
       alias :convert_dd :convert_li
