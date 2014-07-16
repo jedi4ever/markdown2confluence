@@ -13,7 +13,8 @@ The gem is based on [Kramdown](https://github.com/gettalong/kramdown)
 
     $ gem install bundler
     $ git clone git://github.com/jedi4ever/markdown2confluence.git
-    $ bundle install vendor
+    $ cd markdown2confluence
+    $ bundle install
 
 ### Usage:
 
