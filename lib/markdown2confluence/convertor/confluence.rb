@@ -194,7 +194,8 @@ module Kramdown
 
       def convert_codespan(el, indent)
         if  el.value.strip.match(/\n/)
-          "{code}#{el.value}{code}\n"
+          language, code = el.value.split("\n", 2)
+          "{code#{":language=#{language}" if not language.empty?}}\n#{code}{code}\n"
         else
           "{{#{el.value.strip}}}"
         end
