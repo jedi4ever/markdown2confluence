@@ -87,7 +87,7 @@ module Kramdown
       end
 
       def convert_blockquote(el, indent)
-        "#{' '*indent}bq. #{inner(el, indent)}\n"
+        "{quote}\n#{inner(el.children.first, 0)}\n{quote}"
       end
 
       def convert_header(el, indent)
