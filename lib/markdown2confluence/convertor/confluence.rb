@@ -67,6 +67,11 @@ module Kramdown
         result = ''
         indent += @indent
         @stack.push(el)
+
+        if el.type == :ol
+          el.children.each {|c, i| c.options[:ordered] = true}
+        end
+
         el.children.each do |inner_el|
           result << send(DISPATCHER[inner_el.type], inner_el, indent)
         end
@@ -106,7 +111,8 @@ module Kramdown
       alias :convert_dl :convert_ul
 
       def convert_li(el, indent)
-        "#{'*'*(indent/2)}#{inner(el, 0)}"
+        li_char = el.options[:ordered] ? "#" : "*"
+        "#{li_char*(indent/2)}#{inner(el, 0)}"
       end
 
       alias :convert_dd :convert_li
