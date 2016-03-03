@@ -69,7 +69,7 @@ module Kramdown
         @stack.push(el)
 
         if el.type == :ol
-          el.children.each {|c, i| c.options[:ordered] = true}
+          el.children.each {|c| c.options[:ordered] = true}
         end
 
         el.children.each do |inner_el|
