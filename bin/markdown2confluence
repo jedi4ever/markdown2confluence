@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby
 
 require 'markdown2confluence'
+require 'clipboard'
 
 begin
-  puts Kramdown::Document.new(ARGF.read).to_confluence
+  result = Kramdown::Document.new(ARGF.read).to_confluence
+  puts result
+  Clipboard.copy(result)
 rescue Exception => ex
   warn "There was an error running the convertor: \n#{ex}"
 end
