@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "kramdown"
   s.add_dependency "nokogiri"
   s.add_dependency "clipboard"
+  s.add_dependency "ffi"
 
   
   s.add_development_dependency('rake', "~> 0.9.2")

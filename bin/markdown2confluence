@@ -2,11 +2,26 @@
 
 require 'markdown2confluence'
 require 'clipboard'
+require 'optparse'
+include Clipboard
 
 begin
-  result = Kramdown::Document.new(ARGF.read).to_confluence
-  puts result
-  Clipboard.copy(result)
-rescue Exception => ex
+  ARGV << '-h' if ARGV.empty?
+  file_to_read = ARGV[-1] if !ARGV.empty?
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = "Usage: markdown2confluence [options] markdown_file"
+
+	opts.on("-e encoding", "--encoding encoding", "The specific encoding for this file") do |v|
+	  options[:encoding] = v
+	end
+	opts.on_tail("-h", "--help", "Show this message") do
+      puts opts
+      exit
+    end
+  end.parse!
+  encoding = options[:encoding].nil?? Encoding::default_external.to_s: options[:encoding]
+  ["puts", "copy"].each{|f| send(f, Kramdown::Document.new(File.read(file_to_read, :encoding => encoding)).to_confluence)}
+rescue StandardError => ex
   warn "There was an error running the convertor: \n#{ex}"
 end
